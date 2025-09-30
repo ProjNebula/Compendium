@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.avicus</groupId>
   <artifactId>compendium</artifactId>
@@ -15,11 +15,21 @@
     <module>Bukkit</module>
     <module>Bungee</module>
   </modules>
+
   <scm>
-    <connection>scm:git://github.com/Avicus/Compendium.git</connection>
-    <developerConnection>scm:git:ssh://github.com/Avicus/Compendium.git</developerConnection>
-    <url>https://github.com/Avicus/Compendium</url>
+    <connection>scm:git://github.com/ProjNebula/Compendium.git</connection>
+    <developerConnection>scm:git:ssh://github.com/ProjNebula/Compendium.git</developerConnection>
+    <url>https://github.com/ProjNebula/Compendium</url>
   </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>mcnebula-repo-snapshots</id>
+      <name>ProjectNebula Repository</name>
+      <url>https://repo.mcnebula.net/snapshots</url>
+    </repository>
+  </distributionManagement>
+
   <repositories>
     <repository>
       <id>bungeecord-repo</id>
