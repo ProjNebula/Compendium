@@ -16,24 +16,37 @@
     <module>Bungee</module>
   </modules>
 
+  <!-- Version Control -->
   <scm>
     <connection>scm:git://github.com/ProjNebula/Compendium.git</connection>
     <developerConnection>scm:git:ssh://github.com/ProjNebula/Compendium.git</developerConnection>
     <url>https://github.com/ProjNebula/Compendium</url>
   </scm>
 
+  <!-- Deployment -->
   <distributionManagement>
     <repository>
-      <id>mcnebula-repo-snapshots</id>
-      <name>ProjectNebula Repository</name>
-      <url>https://repo.mcnebula.net/snapshots</url>
+      <id>mcnebula-repo-releases</id>
+      <url>https://repo.mcnebula.net/releases</url>
     </repository>
+    <snapshotRepository>
+      <id>mcnebula-repo-snapshots</id>
+      <url>https://repo.mcnebula.net/snapshots</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <repositories>
     <repository>
       <id>bungeecord-repo</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+    <repository>
+      <id>mcnebula-repo-snapshots</id>
+      <url>https://repo.mcnebula.net/snapshots</url>
+    </repository>
+    <repository>
+      <id>mcnebula-repo-releases</id>
+      <url>https://repo.mcnebula.net/releases</url>
     </repository>
   </repositories>
   <dependencies>
