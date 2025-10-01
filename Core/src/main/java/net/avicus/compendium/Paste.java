@@ -1,16 +1,18 @@
 package net.avicus.compendium;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class Paste {
 
-  private static String pasteURL = "https://paste.md-5.net/";
+  private static final String PASTE_URL = "https://paste.mcnebula.net/";
 
   private final String title;
   private final String author;
@@ -29,41 +31,56 @@ public class Paste {
   }
 
   public String upload() {
-    StringBuilder text = new StringBuilder();
-    text.append("Title: " + this.title);
-    text.append("\n");
-    text.append("Author: " + this.author);
-    text.append("\n\n");
-    text.append(this.text);
+    StringBuilder content = new StringBuilder();
+    content.append("Title: ").append(this.title).append("\n");
+    content.append("Author: ").append(this.author).append("\n\n");
+    content.append(this.text);
 
     HttpURLConnection connection = null;
     try {
       //Create connection
-      URL url = new URL(pasteURL + "documents");
+      URL url = new URL(PASTE_URL + "documents");
       connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("POST");
-      connection.setDoInput(true);
+      connection.setRequestProperty("Content-Type", "text/plain; charset=UTF-8");
       connection.setDoOutput(true);
 
       //Send request
-      DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-      wr.writeBytes(text.toString());
-      wr.flush();
-      wr.close();
+      try (OutputStream os = connection.getOutputStream()) {
+        byte[] input = content.toString().getBytes(StandardCharsets.UTF_8);
+        os.write(input, 0, input.length);
+      }
 
-      //Get Response
-      BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      return pasteURL + (this.raw ? "raw/" : "") + new JsonParser().parse(rd.readLine())
-          .getAsJsonObject().get("key").getAsString();
+      //Check response code
+      int responseCode = connection.getResponseCode();
+      if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_CREATED) {
+        return "Paste Failed: HTTP " + responseCode;
+      }
+
+      //Get response
+      try (BufferedReader br = new BufferedReader(
+              new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+        StringBuilder response = new StringBuilder();
+        String responseLine;
+        while ((responseLine = br.readLine()) != null) {
+          response.append(responseLine.trim());
+        }
+
+        //Parse JSON response
+        JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
+        String key = jsonResponse.get("key").getAsString();
+
+        //Return the URL
+        return PASTE_URL + (this.raw ? "raw/" : "") + key;
+      }
 
     } catch (IOException e) {
       e.printStackTrace();
-      return "Paste Failed";
+      return "Paste Failed: " + e.getMessage();
     } finally {
-      if (connection == null) {
-        return null;
+      if (connection != null) {
+        connection.disconnect();
       }
-      connection.disconnect();
     }
   }
 }
