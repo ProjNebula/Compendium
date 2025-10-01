@@ -13,7 +13,6 @@
   <modules>
     <module>Core</module>
     <module>Bukkit</module>
-    <module>Bungee</module>
   </modules>
 
   <!-- Version Control -->

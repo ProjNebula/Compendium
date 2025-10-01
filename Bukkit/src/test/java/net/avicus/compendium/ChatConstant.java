@@ -8,11 +8,14 @@ import net.avicus.compendium.locale.text.LocalizedFormat;
 public class ChatConstant {
 
   private static LocaleBundle bundle;
-  public static LocalizedFormat HELLO = new LocalizedFormat(bundle, "hello");
-  public static LocalizedFormat NAME = new LocalizedFormat(bundle, "name");
+  public static LocalizedFormat HELLO;
+  public static LocalizedFormat NAME;
 
   static {
     bundle = new LocaleBundle();
+
+    HELLO = new LocalizedFormat(bundle, "hello");
+    NAME = new LocalizedFormat(bundle, "name");
 
     LocaleStrings en = new LocaleStrings(new Locale("en"));
     en.add("hello", "Hello, {0}.");
