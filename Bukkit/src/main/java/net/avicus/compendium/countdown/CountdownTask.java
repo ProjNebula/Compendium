@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import net.avicus.compendium.plugin.CompendiumPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.joda.time.Duration;
 import org.joda.time.Seconds;
@@ -27,6 +28,9 @@ public class CountdownTask extends BukkitRunnable {
       this.countdown.onEnd();
       this.cancel();
       this.manager.remove(this.countdown);
+
+      CompendiumPlugin.getInstance().getServer().getPluginManager()
+              .callEvent(new CountdownEndEvent(countdown));
       return;
     }
 
