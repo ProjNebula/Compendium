@@ -53,6 +53,7 @@ public class Messages {
   public static LocalizedFormat ERRORS_NO_SETTING = get("errors.no-setting");
   public static LocalizedFormat ERRORS_NOT_TOGGLE = get("errors.not-toggle");
   public static LocalizedFormat ERRORS_INVALID_VALUE = get("errors.invalid-value");
+  public static final LocalizedFormat SETTINGS_MENU_TITLE = get("settings.menu.title");
 
   public static LocalizedFormat get(String path) {
     return CompendiumPlugin.getLocaleBundle().getFormat(path);

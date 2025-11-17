@@ -53,4 +53,9 @@
       </command>
     </countdown>
   </errors>
+  <settings>
+    <menu>
+      <title>Settings Menu</title>
+    </menu>
+  </settings>
 </locale>
