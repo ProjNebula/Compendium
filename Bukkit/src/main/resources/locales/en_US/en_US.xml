@@ -56,6 +56,7 @@
   <settings>
     <menu>
       <title>Settings Menu</title>
+      <current>Current</current>
     </menu>
   </settings>
 </locale>

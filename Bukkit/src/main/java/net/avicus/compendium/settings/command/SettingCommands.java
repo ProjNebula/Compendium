@@ -21,6 +21,7 @@ import net.avicus.compendium.settings.PlayerSettings;
 import net.avicus.compendium.settings.Setting;
 import net.avicus.compendium.settings.SettingValue;
 import net.avicus.compendium.settings.SettingValueToggleable;
+import net.avicus.compendium.settings.menu.SettingsMenu;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -126,84 +127,12 @@ public class SettingCommands {
     }
   }
 
-  @Command(aliases = {"settings"}, desc = "List available settings.", usage = "[page/query]")
+  @Command(aliases = {"settings", "options"}, desc = "Settings menu")
   public static void settings(CommandContext args, CommandSender sender)
       throws TranslatableCommandErrorException {
     MustBePlayerCommandException.ensurePlayer(sender);
 
-    List<Setting> list = new ArrayList<>(PlayerSettings.settings());
-
-    int page = 1;
-    if (args.argsLength() > 0) {
-      String query = args.getString(0);
-
-      try {
-        page = Integer.parseInt(query);
-      } catch (Exception e) {
-        // Not a number, maybe a query?
-
-        Iterator<Setting> iterator = list.iterator();
-        while (iterator.hasNext()) {
-          Setting next = iterator.next();
-          String name = next.getName().render(sender).toPlainText();
-          if (!name.toLowerCase().contains(query.toLowerCase())) {
-            iterator.remove();
-          }
-        }
-
-        if (args.argsLength() > 1) {
-          try {
-            page = Integer.parseInt(args.getString(1));
-          } catch (Exception e1) {
-            return;
-          }
-        }
-      }
-    }
-
-    // page index = page - 1
-    page--;
-
-    list.sort((o1, o2) -> {
-      String n1 = o1.getName().render(sender).toPlainText();
-      String n2 = o2.getName().render(sender).toPlainText();
-      return n1.compareTo(n2);
-    });
-
-    Paginator<Setting> paginator = new Paginator<>(list, 5);
-
-    if (!paginator.hasPage(page)) {
-      throw new InvalidPaginationPageException(paginator);
-    }
-
-    // Page Header
-    UnlocalizedText line = new UnlocalizedText("--------------",
-        TextStyle.ofColor(ChatColor.RED).strike());
-    UnlocalizedFormat header = new UnlocalizedFormat("{0} {1} ({2}/{3}) {4}");
-    LocalizedNumber pageNumber = new LocalizedNumber(page + 1);
-    LocalizedNumber pagesNumber = new LocalizedNumber(paginator.getPageCount());
-    Localizable title = Messages.GENERIC_SETTINGS.with(ChatColor.YELLOW);
-    sender.sendMessage(header.with(line, title, pageNumber, pagesNumber, line));
-
-    // Setting Format
-    UnlocalizedFormat format = new UnlocalizedFormat("{0}: {1}");
-
-    // Click me!
-    BaseComponent[] clickMe = new BaseComponent[]{
-        Messages.GENERIC_CLICK_ME.with(ChatColor.WHITE).render(sender)};
-
-    for (Setting setting : paginator.getPage(page)) {
-      Localizable name = setting.getName().duplicate();
-      name.style().click(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-          "/setting " + name.render(sender).toPlainText()));
-      name.style().hover(new HoverEvent(HoverEvent.Action.SHOW_TEXT, clickMe));
-      name.style().italic();
-      name.style().color(ChatColor.YELLOW);
-
-      Localizable summary = setting.getSummary().duplicate();
-
-      sender.sendMessage(format.with(ChatColor.WHITE, name, summary));
-    }
+    SettingsMenu.create((Player) sender).open();
   }
 
   @Command(aliases = {"toggle"}, desc = "Toggle a setting between values.", min = 1, max = 1)

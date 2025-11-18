@@ -11,8 +11,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public abstract class SettingsMenuItem implements ClickableInventoryMenuItem, IndexedMenuItem,
         InventoryMenuItem {
 
-    protected static final int MAX_LENGTH = 50;
-    protected static final UnlocalizedFormat TWO_PART_FORMAT = new UnlocalizedFormat("{0}: {1}");
     protected final Player viewer;
     protected final SettingsMenu parent;
     protected final int index;
